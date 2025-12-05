@@ -19,7 +19,7 @@ const database = mysql.createPool({
     host: benserverplex.ddns.net,
     database: agrotech_quis,
     user: alunos,
-    password: senhaAlunos,
+    password: senhaAluno,
     connectionLimit: 10
 })
 
@@ -88,7 +88,8 @@ app.post("/login", (request, response) => {
 
 // ======================= JOGO: PONTUAÇÃO E RANKING =======================
 
-// Salvar pontuação
+// Salvar pontuação do usuário
+// Front envia: { usuarioId, pontuacao }
 app.post("/pontuacao", (request, response) => {
     const { usuarioId, pontuacao } = request.body
 
@@ -113,10 +114,10 @@ app.post("/pontuacao", (request, response) => {
 })
 
 
-// Ranking
+// Ranking (top 10)
 app.get("/ranking", (request, response) => {
     const selectCommand = `
-        SELECT id, name, pontuacao
+        SELECT id, name AS nome, pontuacao
         FROM criarUsuario
         ORDER BY pontuacao DESC
         LIMIT 10
@@ -133,7 +134,8 @@ app.get("/ranking", (request, response) => {
 })
 
 
-// Iniciar servidor
+// ======================= INICIAR SERVIDOR =======================
+
 app.listen(port, () => {
     console.log(`Servidor rodando na porta ${port}`)
 })
